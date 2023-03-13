@@ -32,7 +32,7 @@ jobs:
 
 
     - name: Tag Docker image
-      run: docker tag ${{ github.sha }} 792019447953.dkr.ecr.us-west-2.amazonaws.com/githubactions:${{ github.sha }}
+      run: docker tag ${{ github.sha }} 792019447953.dkr.ecr.us-west-2.amazonaws.com/githubactions:${{ github.sha }} 792019447953.dkr.ecr.us-west-2.amazonaws.com/${{ env.ECR_REPOSITORY }}:latest
 #       run: docker tag https://792019447953.dkr.ecr.us-west-2.amazonaws.com/${{ env.ECR_REPOSITORY }}:${{ github.sha }} https://792019447953.dkr.ecr.us-west-2.amazonaws.com/${{ env.ECR_REPOSITORY }}:latest
 
     - name: Push Docker image to ECR
