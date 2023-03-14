@@ -1,43 +1,64 @@
 name: Build and push Docker image to ECR
 
+# on:
+#   push:
+#     branches: [ master ]
+
+# env:
+# #   ECR_REGISTRY: ecr-registry
+#   ECR_REPOSITORY: githubactions
+#   AWS_REGION: us-west-2
+#   AWS_ACCESS_KEY_ID: ${{ secrets.ACCESS_KEY }}
+#   AWS_SECRET_ACCESS_KEY: ${{ secrets.SECRET_ACCESS_KEY }}
+
+# jobs:
+#   build-and-push:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#     - name: Checkout repository
+#       uses: actions/checkout@v2
+
+#     - name: Configure AWS credentials
+#       uses: aws-actions/configure-aws-credentials@v1
+#       with:
+#         aws-region: ${{ env.AWS_REGION }}
+#         aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
+#         aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+
+#     - name: Build Docker image
+#       run: docker build -t ${{ env.ECR_REPOSITORY }}:${{ github.sha }} .
+# #       run: docker build -t ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }} .
+
+
+#     - name: Tag Docker 
+#       run: docker tag ${{ env.ECR_REPOSITORY }}:${{ github.sha }} 792019447953.dkr.ecr.us-west-2.amazonaws.com/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
+# #       run: docker tag ${{ github.sha }} 792019447953.dkr.ecr.us-west-2.amazonaws.com/githubactions:${{ github.sha }} 792019447953.dkr.ecr.us-west-2.amazonaws.com/${{ env.ECR_REPOSITORY }}:latest
+#  #       run: docker tag https://792019447953.dkr.ecr.us-west-2.amazonaws.com/${{ env.ECR_REPOSITORY }}:${{ github.sha }} https://792019447953.dkr.ecr.us-west-2.amazonaws.com/${{ env.ECR_REPOSITORY }}:latest
+
+#     - name: Push Docker image to ECR
+#       run: |
+#         aws ecr get-login-password | docker login --username githubactions --password-stdin 792019447953.dkr.ecr.us-west-2.amazonaws.com
+#         docker push 792019447953.dkr.ecr.us-west-2.amazonaws.com/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
+#         docker push 792019447953.dkr.ecr.us-west-2.amazonaws.com/${{ env.ECR_REPOSITORY }}:latest
+ 
 on:
   push:
     branches: [ master ]
-
-env:
-#   ECR_REGISTRY: ecr-registry
-  ECR_REPOSITORY: githubactions
-  AWS_REGION: us-west-2
-  AWS_ACCESS_KEY_ID: ${{ secrets.ACCESS_KEY }}
-  AWS_SECRET_ACCESS_KEY: ${{ secrets.SECRET_ACCESS_KEY }}
-
+    
+env: 
+  AWS_ACCOUNT_ID: 792019447953
 jobs:
-  build-and-push:
-    runs-on: ubuntu-latest
-
-    steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
-        aws-region: ${{ env.AWS_REGION }}
-        aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
-
-    - name: Build Docker image
-      run: docker build -t ${{ env.ECR_REPOSITORY }}:${{ github.sha }} .
-#       run: docker build -t ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }} .
-
-
-    - name: Tag Docker 
-      run: docker tag ${{ env.ECR_REPOSITORY }}:${{ github.sha }} 792019447953.dkr.ecr.us-west-2.amazonaws.com/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
-#       run: docker tag ${{ github.sha }} 792019447953.dkr.ecr.us-west-2.amazonaws.com/githubactions:${{ github.sha }} 792019447953.dkr.ecr.us-west-2.amazonaws.com/${{ env.ECR_REPOSITORY }}:latest
- #       run: docker tag https://792019447953.dkr.ecr.us-west-2.amazonaws.com/${{ env.ECR_REPOSITORY }}:${{ github.sha }} https://792019447953.dkr.ecr.us-west-2.amazonaws.com/${{ env.ECR_REPOSITORY }}:latest
-
-    - name: Push Docker image to ECR
-      run: |
-        aws ecr get-login-password | docker login --username githubactions --password-stdin 792019447953.dkr.ecr.us-west-2.amazonaws.com
-        docker push 792019447953.dkr.ecr.us-west-2.amazonaws.com/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
-        docker push 792019447953.dkr.ecr.us-west-2.amazonaws.com/${{ env.ECR_REPOSITORY }}:latest
+    build-and-push:
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v1
+        - uses: vitr/actions-build-and-upload-to-ecs@master
+          with:
+            access_key_id: ${{ secrets.ACCESS_KEY }}
+            secret_access_key: ${{ secrets.SECRET_ACCESS_KEY }}
+            account_id: ${{ env.AWS_ACCOUNT_ID }}
+            repo: docker/repo
+            region: ap-northeast-2
+            tags: latest,${{ github.sha }}
+            create_repo: true
