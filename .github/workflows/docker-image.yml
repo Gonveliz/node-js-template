@@ -38,5 +38,6 @@ jobs:
 
     - name: Push Docker image to ECR
       run: |
+        aws ecr get-login-password | docker login --username githubactions --password-stdin 792019447953.dkr.ecr.us-west-2.amazonaws.com
         docker push 792019447953.dkr.ecr.us-west-2.amazonaws.com/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
         docker push 792019447953.dkr.ecr.us-west-2.amazonaws.com/${{ env.ECR_REPOSITORY }}:latest
