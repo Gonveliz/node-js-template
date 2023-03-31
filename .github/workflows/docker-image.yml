@@ -42,9 +42,7 @@ name: Build and push Docker image to ECR
 #         docker push 792019447953.dkr.ecr.us-west-2.amazonaws.com/${{ env.ECR_REPOSITORY }}:${{ github.sha }}
 #         docker push 792019447953.dkr.ecr.us-west-2.amazonaws.com/${{ env.ECR_REPOSITORY }}:latest
  
-on:
-  push:
-    branches: [ master ]
+on: workflow_dispatch
     
 env: 
   AWS_ACCOUNT_ID: 792019447953
