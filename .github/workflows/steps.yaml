@@ -1,4 +1,4 @@
-name: github-actions-poc
+name: place holder steps
 on: workflow_dispatch
 # on:
 #   push:
