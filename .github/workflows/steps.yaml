@@ -31,7 +31,7 @@ jobs:
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v2
       with:
-        role-to-assume: arn:aws:iam::792019447953:role/gh-action-role
+        role-to-assume: arn:aws:iam::792019447953:role/gh-actions-role
         aws-region: us-west-2
 
     - name: Build, tag, and push docker image to Amazon ECR
